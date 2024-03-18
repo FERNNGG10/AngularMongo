@@ -1,0 +1,95 @@
+<div class="container mt-5">
+   
+    <div class="row">
+        <div class="col">
+            <table class="table border">
+                <thead>
+                    @if(rol==1 || rol==3){
+                    <button type="button" class="mt-2 ms-2 btn btn-primary" data-bs-toggle="modal" data-bs-target="#PostClassification">
+                            Agregar
+                    </button>
+                }
+                    
+                  <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">Classificacion</th>
+                    <th scope="col">Status</th>
+                    @if(rol==1 || rol==3){
+                    <th scope="col">Acciones</th>
+                    }
+                  </tr>
+                </thead>
+                <tbody>
+                    @for (class of classifications.classifications; track $index) {
+                    <tr>
+                        <td>{{class.id}}</td>
+                        <td>{{class.classification}}</td>
+                        @if(class.status === 1){
+                            <td>Activo</td>
+                        }@else{
+                            <td>Inactivo</td>
+                        }
+                   
+                        <td>
+                            @if(rol==1 || rol==3){
+                            <a [routerLink]="['/home/clasificacionedit/',class.id]"   class="btn btn-warning">Editar</a>
+                            }
+                            @if(rol==1){
+                            <a  (click)="deleteid(class.id)"   data-bs-toggle="modal" data-bs-target="#DeleteClassification" class="btn btn-danger ms-3">Eliminar</a>
+                            }
+                        </td>
+                    </tr>
+                    }
+                 
+                </tbody>
+              </table>
+        </div>
+    </div>
+</div>
+
+<app-modal [modalId]="'PostClassification'" [modalTitle]="'Agregar Juego'">
+    @if(msg){
+        <div class="alert alert-success" role="alert">
+            {{msg}}
+        </div>
+        }
+    <form [formGroup]="classificationform" (ngSubmit)="store()">
+        <div class="mb-3">
+          <label for="name" class="form-label">Nombre</label>
+          <input type="text" class="form-control" id="name" name="name" formControlName="classification" >
+          <div *ngIf="classification?.invalid && (classification?.dirty || classification?.touched)" class="text-danger">
+            <p *ngIf="classification?.errors?.['required']">Nombre es requerido</p>
+            <p *ngIf="classification?.errors?.['minlength']">Nombre debe ser al menos 5 caracteres</p>
+            <p *ngIf="classification?.errors?.['maxlength']">Nombre es maximo de 30 caracteres</p>
+          </div>
+          <p class="text-danger" *ngIf="errors.classification" >{{errors.classification}}</p>
+        </div>
+       <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="!classificationform.valid">Submit</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+       </div>
+      
+      
+    </form>
+</app-modal>
+
+<app-modal [modalId]="'DeleteClassification'" [modalTitle]="'Elimina clasificacion'">
+   <div class="container">
+    @if(msg){
+        <div class="row">
+           {{msg}}
+        </div>
+    }@else {
+
+        <div class="row">
+            Esta seguro de eliminar el juego?
+        </div>
+    }
+        <div class="modal-footer">
+            <button (click)="delete()" type="submit" class="btn btn-danger" [disabled]="id === 0">Submit</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+       </div>
+   </div>
+</app-modal>
+
+

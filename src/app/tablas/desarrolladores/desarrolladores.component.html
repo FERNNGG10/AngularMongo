@@ -1,0 +1,114 @@
+<div class="container mt-5">
+   
+    <div class="row">
+        <div class="col">
+            <table class="table border">
+                <thead>
+                    @if(rol==1 ){
+                    <button type="button" class="mt-2 ms-2 btn btn-primary" data-bs-toggle="modal" data-bs-target="#PostDeveloper">
+                            Agregar
+                    </button>
+                }
+                    
+                  <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Telefono</th>
+                    <th scope="col">Status</th>
+                    @if (rol==1) {
+                    <th scope="col">Acciones</th>
+                    }
+                  </tr>
+                </thead>
+                <tbody>
+                    @for (developer of developers.developers; track $index) {
+                    <tr>
+                        <td>{{developer.name}}</td>
+                        <td>{{developer.email}}</td>
+                        <td>{{developer.phone}}</td>
+                        @if(developer.status === 1){
+                            <td>Activo</td>
+                        }@else{
+                            <td>Inactivo</td>
+                        }
+                        @if(rol==1){
+                        <td>
+                            <a  [routerLink]="['/home/desarrolladoredit/',developer.id]"   class="btn btn-warning">Editar</a>
+                            <a  (click)="deleteid(developer.id)"   data-bs-toggle="modal" data-bs-target="#DeleteDeveloper" class="btn btn-danger ms-3">Eliminar</a>
+                        </td>
+                        }
+                    </tr>
+                    }
+                 
+                </tbody>
+              </table>
+        </div>
+    </div>
+</div>
+
+<app-modal [modalId]="'PostDeveloper'" [modalTitle]="'Agregar desarrollador'">
+    @if(msg){
+        <div class="alert alert-success" role="alert">
+            {{msg}}
+        </div>
+        }
+    <form [formGroup]="developerform" (ngSubmit)="store()">
+        <div class="mb-3">
+          <label for="name" class="form-label">Nombre</label>
+          <input type="text" class="form-control" id="name" name="name" formControlName="name" >
+          <div *ngIf="name?.invalid && (name?.dirty || name?.touched)" class="text-danger">
+            <p *ngIf="name?.errors?.['required']">Nombre es requerido</p>
+            <p *ngIf="name?.errors?.['minlength']">Nombre debe ser al menos 5 caracteres</p>
+            <p *ngIf="name?.errors?.['maxlength']">Nombre es maximo de 30 caracteres</p>
+          </div>
+          <p class="text-danger" *ngIf="errors.name" >{{errors.name}}</p>
+
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">email</label>
+            <input type="text" class="form-control" id="name" name="description" formControlName="email" >
+            <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="text-danger">
+                <p *ngIf="email?.errors?.['required']">email es requerido</p>
+                <p *ngIf="email?.errors?.['email']">email debe ser valido</p>
+            </div>
+            <p class="text-danger" *ngIf="errors.email" >{{errors.email}}</p>
+        </div>
+        <div class="mb-3">
+            <label for="stock" class="form-label">phone</label>
+            <input type="number" class="form-control" id="name" name="stock" formControlName="phone">
+            <div *ngIf="phone?.invalid && (phone?.dirty || phone?.touched)" class="text-danger">
+                <p *ngIf="phone?.errors?.['required']">numero es requerido</p>
+                <p *ngIf="phone?.errors?.['minlength']">numero debe ser al menos 10 digitos</p>
+                <p *ngIf="phone?.errors?.['maxlength']">numero es maximo de 10 digitos</p>
+            </div>
+            <p class="text-danger" *ngIf="errors.phone" >{{errors.phone}}</p>
+        </div>
+       <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="!developerform.valid">Submit</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+       </div>
+      
+      
+    </form>
+</app-modal>
+
+<app-modal [modalId]="'DeleteDeveloper'" [modalTitle]="'Elimina desarrollador'">
+   <div class="container">
+    @if(msg){
+        <div class="row">
+           {{msg}}
+        </div>
+    }@else {
+
+        <div class="row">
+            Esta seguro de eliminar el desarrollador?
+        </div>
+    }
+        <div class="modal-footer">
+            <button (click)="delete()" type="submit" class="btn btn-danger" [disabled]="id === 0">Submit</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+       </div>
+   </div>
+</app-modal>
+
+

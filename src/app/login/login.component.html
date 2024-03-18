@@ -1,0 +1,44 @@
+<div class="container mt-5">
+    <div class="row align-items-center">
+        <div class="col mt-4 border p-5">
+            <form>
+                @if(back){
+                    @if(msg){
+                        <div class="alert alert-danger" role="alert">
+                            {{msg}}
+                        </div>
+                    }
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="email" placeholder="Enter email"  name="email" [(ngModel)]="Login.email">
+                      </div>
+                      <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" placeholder="Enter password"  name="password" [(ngModel)]="Login.password">
+                      </div>
+                      <button (click)="login()" class="btn btn-primary">Submit</button>
+                     <div class="mb-3">
+                        <a routerLink="/register">Registrarse</a>
+                     </div>
+                }
+                @if(show_code){
+
+                    <div class="mb-3">
+                        @if(error){
+                            <label class="text-danger" for="code">{{error}}</label>
+                        }@else {
+                            <label for="code">{{code_response}}</label>
+                        }
+                       
+                        <input type="text" class="form-control" id="code" placeholder="Enter code" name="code" [(ngModel)]="code.code">
+                    </div>
+                    <button (click)="verify_code()" class="btn btn-primary">Submit</button>
+                    
+                }
+               
+                
+              </form>
+
+        </div>
+    </div>
+</div>

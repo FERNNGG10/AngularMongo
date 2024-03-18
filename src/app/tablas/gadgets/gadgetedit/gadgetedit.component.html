@@ -1,0 +1,46 @@
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form [formGroup]="gadgetform" (ngSubmit)="update()">
+                <div class="mb-3">
+                  <label for="name" class="form-label">Nombre</label>
+                  <input type="text" class="form-control" id="name" name="name" formControlName="name" >
+
+                  <p class="text-danger" *ngIf="errors.name" >{{errors.name}}</p>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Descripcion</label>
+                    <input type="text" class="form-control" id="name" name="description" formControlName="description" >
+                   
+                    <p class="text-danger" *ngIf="errors.description" >{{errors.description}}</p>
+                </div>
+                <div class="mb-3">
+                    <label for="stock" class="form-label">Stock</label>
+                    <input type="number" class="form-control" id="name" name="stock" formControlName="stock">
+                   
+                    <p class="text-danger" *ngIf="errors.stock" >{{errors.stock}}</p>
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Precio</label>
+                    <input type="price" class="form-control" id="name" name="price" formControlName="price">
+              
+                    <p class="text-danger" *ngIf="errors.price" >{{errors.price}}</p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Proovedor</label>
+                    <select class="form-select" aria-label="Default select example" formControlName="supplier_id" >
+                        <option *ngFor="let supplier of suppliers.suppliers" [value]="supplier.id">{{supplier.name}}</option>
+                    </select>
+                    <p class="text-danger" *ngIf="errors.supplier_id" >{{errors.supplier_id}}</p>
+                </div>
+        
+               <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" >Submit</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+               </div>
+              
+              
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form [formGroup]="userform" (ngSubmit)="update()">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nombre</label>
+                    <input type="text" class="form-control" id="name" name="name" formControlName="name">
+                    <p class="text-danger" *ngIf="errors.name">{{errors.name}}</p>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Correo</label>
+                    <input type="email" class="form-control" id="email" name="email" formControlName="email">
+                    <p class="text-danger" *ngIf="errors.email">{{errors.email}}</p>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" id="password" name="password" formControlName="password">
+                    <p class="text-danger" *ngIf="errors.password">{{errors.password}}</p>
+                </div>
+                <div class="mb-3">
+                    <label for="rol_id" class="form-label">Rol</label>
+                    <select class="form-select" id="rol_id" name="rol_id" formControlName="rol_id">
+                        <option *ngFor="let rol of roles.roles" [value]="rol.id">{{rol.role}}</option>  
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="status" class="form-label">Estatus</label>
+                    <select class="form-select" id="status" formControlName="status">
+                        <option [value]="1">Activo</option>
+                        <option [value]="0">Inactivo</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" >Submit</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

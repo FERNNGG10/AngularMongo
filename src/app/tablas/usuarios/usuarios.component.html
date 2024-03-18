@@ -1,0 +1,130 @@
+<div class="container mt-5">
+   
+    <div class="row">
+        <div class="col">
+            <table class="table border">
+                <thead>
+                    
+                    <button type="button" class="mt-2 ms-2 btn btn-primary" data-bs-toggle="modal" data-bs-target="#PostUser">
+                            Agregar
+                    </button>
+                    
+                  <tr>
+                    <th scope="col">Usuario</th>
+                    <th scope="col">Correo</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Rol</th>
+                    <th scope="col">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    @for (user of users.users; track $index) {
+                    <tr>
+                        <td>{{user.name}}</td>
+                        <td>{{user.email}}</td>
+                        @if(user.status === 1){
+                            <td>Activo</td>
+                        }@else{
+                            <td>Inactivo</td>
+                        }
+                        @if(user.rol_id === 1){
+                            <td>Administrador</td>
+                        }@else if(user.rol_id === 2){
+                            <td>Invitado</td>
+                        }
+                        @else {
+                            <td>Usuario</td>
+                        }
+                       
+                       
+                        <td>
+                            <a [routerLink]="['/home/usuarioedit/',user.id]"   class="btn btn-warning">Editar</a>
+                            <a  (click)="deleteid(user.id)"   data-bs-toggle="modal" data-bs-target="#DeleteUser" class="btn btn-danger ms-3">Eliminar</a>
+                        </td>
+                    </tr>
+                    }
+                 
+                </tbody>
+              </table>
+        </div>
+    </div>
+</div>
+
+<app-modal [modalId]="'PostUser'" [modalTitle]="'Agregar Usuario'">
+    @if(msg){
+        <div class="alert alert-success" role="alert">
+            {{msg}}
+        </div>
+        }
+    <form [formGroup]="userform" (ngSubmit)="store()">
+        <div class="mb-3">
+            <label for="name" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="name" name="name" formControlName="name">
+            <div *ngIf="name?.invalid && (name?.dirty || name?.touched)" class="text-danger">
+                <p *ngIf="name?.errors?.['required']">Nombre es requerido</p>
+                <p *ngIf="name?.errors?.['minlength']">Nombre debe ser al menos 5 caracteres</p>
+                <p *ngIf="name?.errors?.['maxlength']">Nombre es máximo de 30 caracteres</p>
+            </div>
+            <p class="text-danger" *ngIf="errors.name">{{errors.name}}</p>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Correo</label>
+            <input type="email" class="form-control" id="email" name="email" formControlName="email">
+            <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="text-danger">
+                <p *ngIf="email?.errors?.['required']">Correo es requerido</p>
+                <p *ngIf="email?.errors?.['email']">Correo inválido</p>
+            </div>
+            <p class="text-danger" *ngIf="errors.email">{{errors.email}}</p>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="password" name="password" formControlName="password">
+            <div *ngIf="password?.invalid && (password?.dirty || password?.touched)" class="text-danger">
+                <p *ngIf="password?.errors?.['required']">Contraseña es requerida</p>
+                <p *ngIf="password?.errors?.['minlength']">Contraseña debe tener al menos 8 caracteres</p>
+            </div>
+            <p class="text-danger" *ngIf="errors.password">{{errors.password}}</p>
+        </div>
+        <div class="mb-3">
+            <label for="password_confirmation" class="form-label">Confirmar Contraseña</label>
+            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" formControlName="password_confirmation">
+            <div *ngIf="password_confirmation?.invalid && (password_confirmation?.dirty || password_confirmation?.touched)" class="text-danger">
+                <p *ngIf="password_confirmation?.errors?.['required']">Confirmar Contraseña es requerida</p>
+                <p *ngIf="password_confirmation?.errors?.['minlength']">Confirmar Contraseña debe tener al menos 8 caracteres</p>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="rol_id" class="form-label">Rol</label>
+            <select class="form-select" id="rol_id" name="rol_id" formControlName="rol_id">
+                <option *ngFor="let rol of roles.roles" [value]="rol.id">{{rol.role}}</option>
+                
+            </select>
+        </div>
+
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="!userform.valid">Submit</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+    </form>
+</app-modal>
+
+<app-modal [modalId]="'DeleteUser'" [modalTitle]="'Elimina Usuario'">
+   <div class="container">
+    @if(msg){
+        <div class="row">
+           {{msg}}
+        </div>
+    }@else {
+
+        <div class="row">
+            Esta seguro de eliminar el usuario?
+        </div>
+    }
+        <div class="modal-footer">
+            <button (click)="delete()" type="submit" class="btn btn-danger" [disabled]="id === 0">Submit</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+       </div>
+   </div>
+</app-modal>
+
+

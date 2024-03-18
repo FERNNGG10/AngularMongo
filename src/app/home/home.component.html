@@ -1,0 +1,71 @@
+<nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+    <div class="container-fluid">
+   
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="ms-2 navbar-nav me-auto mb-2 mb-lg-0">
+            
+            @if(rol==1){
+
+            
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/home/usuarios" routerLinkActive="active" ariaCurrentWhenActive="page">users</a>
+            </li>
+            }
+            @if(rol==1 || rol==2){
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/home/games" routerLinkActive="active" ariaCurrentWhenActive="page">games</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/home/consoles" routerLinkActive="active" ariaCurrentWhenActive="page">consoles</a>
+            </li>
+            }
+            
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/home/categorias" routerLinkActive="active" ariaCurrentWhenActive="page">categories</a>
+            </li>
+            @if(rol==1 || rol==2){
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/home/gadgets" routerLinkActive="active" ariaCurrentWhenActive="page">gadgets</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/home/comentarios" routerLinkActive="active" ariaCurrentWhenActive="page">comentarios</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/home/desarrolladores" routerLinkActive="active" ariaCurrentWhenActive="page">developers</a>
+            </li>
+          }
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                More
+              </a>
+              
+              <ul class="dropdown-menu">
+                @if(rol==1 || rol==2){
+                <li><a class="dropdown-item" routerLink="/home/proovedores" routerLinkActive="active" ariaCurrentWhenActive="page">suppliers</a></li>
+                }
+                
+                <li><a class="dropdown-item" routerLink="/home/clasificaciones" routerLinkActive="active" ariaCurrentWhenActive="page">clasificaciones</a></li>
+                @if(rol==1 || rol==2){
+                <li><a class="dropdown-item" routerLink="/home/dlcs" routerLinkActive="active" ariaCurrentWhenActive="page">dlcs</a></li>
+                }
+               
+                <li><a class="dropdown-item" routerLink="/home/metodopago" routerLinkActive="active" ariaCurrentWhenActive="page">metodo de pago</a></li>
+                @if(rol==1 ){
+                <li><a class="dropdown-item" routerLink="/home/acciones" routerLinkActive="active" ariaCurrentWhenActive="page">Actividades</a></li>
+                }
+
+              </ul>
+            
+            </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+<main>
+    <router-outlet></router-outlet>
+</main>

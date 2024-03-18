@@ -1,0 +1,130 @@
+<div class="container mt-5">
+   
+    <div class="row">
+        <div class="col">
+            <table class="table border">
+                <thead>
+                    @if(rol==1 ){
+                    <button type="button" class="mt-2 ms-2 btn btn-primary" data-bs-toggle="modal" data-bs-target="#PostGadget">
+                            Agregar
+                    </button>
+                }
+                    
+                  <tr>
+                    <th scope="col">Gadget</th> 
+                    <th scope="col">Descripcion</th>                   
+                    <th scope="col">Proveedor</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">precio</th>
+                    @if(rol==1){
+                    <th scope="col">Acciones</th>
+                    }
+                  </tr>
+                </thead>
+                <tbody>
+                    @for (gadget of gadgets.gadgets; track $index) {
+                    <tr>
+                        <td>{{gadget.gadget}}</td>
+                        <td>{{gadget.description}}</td>
+                        <td>{{gadget.supplier}}</td>
+                        <td>{{gadget.stock}}</td>
+                        <td>{{gadget.price}}</td>
+                        @if(rol==1){
+
+                        
+                        <td>
+                            <a [routerLink]="['/home/gadgetedit/',gadget.id]"    class="btn btn-warning">Editar</a>
+                            <a  (click)="deleteid(gadget.id)"   data-bs-toggle="modal" data-bs-target="#DeleteGadget" class="btn btn-danger ms-3">Eliminar</a>
+                        </td>
+                    }
+                    </tr>
+                    }
+                 
+                </tbody>
+              </table>
+        </div>
+    </div>
+</div>
+
+<app-modal [modalId]="'PostGadget'" [modalTitle]="'Agregar Gadget'">
+    @if(msg){
+        <div class="alert alert-success" role="alert">
+            {{msg}}
+        </div>
+        }
+    <form [formGroup]="gadgetform" (ngSubmit)="store()">
+        <div class="mb-3">
+          <label for="name" class="form-label">Nombre</label>
+          <input type="text" class="form-control" id="name" name="name" formControlName="name" >
+          <div *ngIf="name?.invalid && (name?.dirty || name?.touched)" class="text-danger">
+            <p *ngIf="name?.errors?.['required']">Nombre es requerido</p>
+            <p *ngIf="name?.errors?.['minlength']">Nombre debe ser al menos 5 caracteres</p>
+            <p *ngIf="name?.errors?.['maxlength']">Nombre es maximo de 30 caracteres</p>
+          </div>
+          <p class="text-danger" *ngIf="errors.name" >{{errors.name}}</p>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Descripcion</label>
+            <input type="text" class="form-control" id="name" name="description" formControlName="description" >
+            <div *ngIf="description?.invalid && (description?.dirty || description?.touched)" class="text-danger">
+                <p *ngIf="description?.errors?.['required']">Descripcion es requerido</p>
+                <p *ngIf="description?.errors?.['minlength']">Descripcion debe ser al menos 5 caracteres</p>
+                <p *ngIf="description?.errors?.['maxlength']">Descripcion es maximo de 30 caracteres</p>
+            </div>
+            <p class="text-danger" *ngIf="errors.description" >{{errors.description}}</p>
+        </div>
+        <div class="mb-3">
+            <label for="stock" class="form-label">Stock</label>
+            <input type="number" class="form-control" id="name" name="stock" formControlName="stock">
+            <div *ngIf="stock?.invalid && (stock?.dirty || stock?.touched)" class="text-danger">
+                <p *ngIf="stock?.errors?.['required']">stock es requerido</p>
+                <p *ngIf="stock?.errors?.['pattern']">Stock debe ser un número válido</p>
+            </div>
+            <p class="text-danger" *ngIf="errors.stock" >{{errors.stock}}</p>
+        </div>
+        <div class="mb-3">
+            <label for="price" class="form-label">Precio</label>
+            <input type="price" class="form-control" id="name" name="price" formControlName="price">
+            <div *ngIf="price?.invalid && (price?.dirty || price?.touched)" class="text-danger">
+                <p *ngIf="price?.errors?.['required']">price es requerido</p>
+                <p *ngIf="price?.errors?.['pattern']">Precio debe ser un número válido</p>
+            </div>
+            <p class="text-danger" *ngIf="errors.price" >{{errors.price}}</p>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Proovedor</label>
+            <select class="form-select" aria-label="Default select example" formControlName="supplier_id" >
+                <option *ngFor="let supplier of suppliers.suppliers" [value]="supplier.id">{{supplier.name}}</option>
+            </select>
+            <p class="text-danger" *ngIf="errors.supplier_id" >{{errors.supplier_id}}</p>
+        </div>
+
+       <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="!gadgetform.valid">Submit</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+       </div>
+      
+      
+    </form>
+</app-modal>
+
+
+
+<app-modal [modalId]="'DeleteGadget'" [modalTitle]="'Elimina Gadget'">
+   <div class="container">
+    @if(msg){
+        <div class="row">
+           {{msg}}
+        </div>
+    }@else {
+
+        <div class="row">
+            Esta seguro de eliminar el juego?
+        </div>
+    }
+        <div class="modal-footer">
+            <button (click)="delete()" type="submit" class="btn btn-danger" [disabled]="id === 0">Submit</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+       </div>
+   </div>
+</app-modal>

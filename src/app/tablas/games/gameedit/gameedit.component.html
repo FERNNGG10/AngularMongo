@@ -1,0 +1,65 @@
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form [formGroup]="gameform" (ngSubmit)="update()">
+                <div class="mb-3">
+                  <label for="name" class="form-label">Nombre</label>
+                  <input type="text" class="form-control" id="name" name="name" formControlName="name" >
+                  <p class="text-danger" *ngIf="errors.name" >{{errors.name}}</p>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Descripcion</label>
+                    <input type="text" class="form-control" id="name" name="description" formControlName="description" >
+                    <p class="text-danger" *ngIf="errors.description" >{{errors.description}}</p>
+                </div>
+                <div class="mb-3">
+                    <label for="stock" class="form-label">Stock</label>
+                    <input type="number" class="form-control" id="name" name="stock" formControlName="stock">
+                    <p class="text-danger" *ngIf="errors.stock" >{{errors.stock}}</p>
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Precio</label>
+                    <input type="price" class="form-control" id="name" name="price" formControlName="price">
+                    <p class="text-danger" *ngIf="errors.price" >{{errors.price}}</p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Categoria</label>
+                    <select class="form-select" aria-label="Default select example" formControlName="category_id" >
+                        <option *ngFor="let category of categories.categories" [value]="category.id">{{category.category}}</option>
+                    </select>
+                    <p class="text-danger" *ngIf="errors.category_id" >{{errors.category_id}}</p>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Clasificacion</label>
+                    <select class="form-select" aria-label="Default select example" formControlName="classification_id" >
+                        <option *ngFor="let classification of classifications.classifications" [value]="classification.id">{{classification.classification}}</option>
+                    </select>
+                    <p class="text-danger" *ngIf="errors.classification_id" >{{errors.classification_id}}</p>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Desarrollador</label>
+                    <select class="form-select" aria-label="Default select example" formControlName="developer_id" >
+                        <option *ngFor="let developer of developers.developers" [value]="developer.id">{{developer.name}}</option>
+                    </select>
+                    <p class="text-danger" *ngIf="errors.developer_id" >{{errors.developer_id}}</p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Proovedor</label>
+                    <select class="form-select" aria-label="Default select example" formControlName="supplier_id" >
+                        <option *ngFor="let supplier of suppliers.suppliers" [value]="supplier.id">{{supplier.name}}</option>
+                    </select>
+                    <p class="text-danger" *ngIf="errors.supplier_id" >{{errors.supplier_id}}</p>
+                </div>
+        
+               <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" >Submit</button>
+                   
+               </div>
+              
+              
+            </form>
+        </div>
+    </div>
+</div>

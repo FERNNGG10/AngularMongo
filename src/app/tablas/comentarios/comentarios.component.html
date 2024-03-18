@@ -1,0 +1,95 @@
+<div class="container mt-5">
+   
+    <div class="row">
+        <div class="col">
+            <table class="table border">
+                <thead>
+                    @if(rol==1 ){
+                    <button type="button" class="mt-2 ms-2 btn btn-primary" data-bs-toggle="modal" data-bs-target="#PostReview">
+                            Agregar
+                    </button>
+                    }
+                    
+                  <tr>
+                    <th scope="col">Usuario</th>
+                    <th scope="col">Juego</th>
+                    <th scope="col">Comentario</th>
+                    @if(rol==1){
+                    <th scope="col">Acciones</th>
+                    }
+                  </tr>
+                </thead>
+                <tbody>
+                    @for (review of reviews.reviews; track $index) {
+                    <tr>
+                        <td>{{review.user}}</td>
+                        <td>{{review.game}}</td>
+                        <td>{{review.review}}</td>
+                        @if(rol==1){
+                        <td>
+                            <a [routerLink]="['/home/comentarioedit/',review.id]"   class="btn btn-warning">Editar</a>
+                            <a  (click)="deleteid(review.id)"   data-bs-toggle="modal" data-bs-target="#DeleteReview" class="btn btn-danger ms-3">Eliminar</a>
+                        </td>
+                        }
+                    </tr>
+                    }
+                 
+                </tbody>
+              </table>
+        </div>
+    </div>
+</div>
+
+<app-modal [modalId]="'PostReview'" [modalTitle]="'Agregar Review'">
+    @if(msg){
+        <div class="alert alert-success" role="alert">
+            {{msg}}
+        </div>
+        }
+    <form [formGroup]="reviewform" (ngSubmit)="store()">
+        <div class="mb-3">
+          <label for="name" class="form-label">Comentario</label>
+          <input type="text" class="form-control" id="name" name="name" formControlName="comment" >
+          <div *ngIf="comment?.invalid && (comment?.dirty || comment?.touched)" class="text-danger">
+            <p *ngIf="comment?.errors?.['required']">Nombre es requerido</p>
+            <p *ngIf="comment?.errors?.['minlength']">Nombre debe ser al menos 5 caracteres</p>
+            <p *ngIf="comment?.errors?.['maxlength']">Nombre es maximo de 30 caracteres</p>
+          </div>
+          <p class="text-danger" *ngIf="errors.comment" >{{errors.comment}}</p>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Juego</label>
+            <select class="form-select" aria-label="Default select example" formControlName="game_id" >
+                <option *ngFor="let juego of juegos.games" [value]="juego.id">{{juego.name}}</option>
+            </select>
+            <p class="text-danger" *ngIf="errors.game_id" >{{errors.game_id}}</p>
+        </div>
+       <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="!reviewform.valid">Submit</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+       </div>
+      
+      
+    </form>
+</app-modal>
+
+<app-modal [modalId]="'DeleteReview'" [modalTitle]="'Elimina Review'">
+   <div class="container">
+    @if(msg){
+        <div class="row">
+           {{msg}}
+        </div>
+    }@else {
+
+        <div class="row">
+            Esta seguro de eliminar review?
+        </div>
+    }
+        <div class="modal-footer">
+            <button (click)="delete()" type="submit" class="btn btn-danger" [disabled]="id === 0">Submit</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+       </div>
+   </div>
+</app-modal>
+
+
