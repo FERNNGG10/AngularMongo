@@ -8,6 +8,7 @@ import { ModalComponent } from '../../components/modal/modal.component';
 import { SupplierIndexInterface } from '../../interfaces/SupplierIndexInterface.interface';
 import { GameService } from '../../services/game.service';
 import { AuthService } from '../../services/auth.service';
+import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
 
 @Component({
   selector: 'app-consoles',
@@ -17,29 +18,45 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './consoles.component.css'
 })
 export class ConsolesComponent implements OnInit{
-
+  
   public consoles:ConsoleIndexInterface={consoles:[]};
   public consoledata:ConsoleDataInterface={name:'',description:'',price:0,stock:0,supplier_id:0};
   public suppliers:SupplierIndexInterface={suppliers:[]};
   msg='';
   id=0;
   rol=0;
+  //public notification:string='';
+  //eventsource = new EventSource('http://127.0.0.1:8000/api/stream');
+  
   public errors={
     name:'',description:'',price:"",stock:"",supplier_id:""
   } 
   constructor(private console:ConsolesService,private game:GameService,private auth:AuthService) { }
 
   ngOnInit(): void {
+    
     this.console.index().subscribe((response)=>{
       this.consoles = response;
     });
+   
     this.game.suppliers().subscribe((response)=>{
       this.suppliers = response;
     });
     this.auth.rolid().subscribe((response)=>{
       this.rol = response
     });
+
+    /*this.eventsource.onmessage=(event)=>{
+      console.log(event.data);
+      this.notification = event.data;
+      setTimeout(()=>{this.notification=''},5000);
+      this.console.index().subscribe((response)=>{
+        this.consoles = response;
+      });
+    }*/
   }
+
+  
   consoleform = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(5),Validators.maxLength(30)]),
     description: new FormControl('', [Validators.required, Validators.minLength(5),Validators.maxLength(50)]),
@@ -108,6 +125,14 @@ export class ConsolesComponent implements OnInit{
       console.log(error.error);
     });
   }
-
+ //token = localStorage.getItem('token');
+  //socket$ = webSocket<ConsoleIndexInterface>('ws://127.0.0.1:6001/app/console?auth_key=' + this.token);
+   /*this.socket$.subscribe(
+      msgg =>{
+        console.log(msgg);
+        this.consoles = msgg;
+      },err=>console.log(err),
+      ()=>console.log('complete')
+    )*/
 
 }

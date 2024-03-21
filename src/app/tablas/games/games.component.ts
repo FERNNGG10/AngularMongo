@@ -11,6 +11,8 @@ import { DeveloperIndexInterface } from '../../interfaces/DeveloperIndexInterfac
 import { CommonModule } from '@angular/common';
 import { Router,RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { interval } from 'rxjs';
+import { switchMap } from 'rxjs';
 
 
 @Component({
@@ -61,45 +63,13 @@ export class GamesComponent implements OnInit{
 
     
   ngOnInit(): void {
-    this.game.index().subscribe((response)=>{
-      this.games = response;
-      console.log(this.games);
-    },(error)=>{
-      console.log(error);
-      console.log(error.error);
-    });
 
-    this.game.categories().subscribe((response)=>{
-      this.categories = response;
-      console.log(this.categories);
-    },(error)=>{
-      console.log(error);
-      console.log(error.error);
-    });
-
-    this.game.suppliers().subscribe((response)=>{
-      this.suppliers = response;
-      console.log(this.suppliers);
-    },(error)=>{
-      console.log(error);
-      console.log(error.error);
-    });
-
-    this.game.classifications().subscribe((response)=>{
-      this.classifications = response;
-      console.log(this.classifications);
-    },(error)=>{
-      console.log(error);
-      console.log(error.error);
-    });
-
-    this.game.developers().subscribe((response)=>{
-      this.developers = response;
-      console.log(this.developers);
-    },(error)=>{
-      console.log(error);
-      console.log(error.error);
-    });
+    interval(5000).pipe(
+      switchMap(()=>this.game.index())
+    ).subscribe(
+      (response)=>{this.games = response;},
+      (error)=>{console.log(error);}
+    )
 
     this.auth.rolid().subscribe((response)=>{
       this.rol = response
@@ -169,6 +139,41 @@ export class GamesComponent implements OnInit{
         console.log(error.error);
         console.log(error.error.errors);
       });
+    }
+
+    funcion():void{
+      
+    this.game.categories().subscribe((response)=>{
+      this.categories = response;
+      console.log(this.categories);
+    },(error)=>{
+      console.log(error);
+      console.log(error.error);
+    });
+
+    this.game.suppliers().subscribe((response)=>{
+      this.suppliers = response;
+      console.log(this.suppliers);
+    },(error)=>{
+      console.log(error);
+      console.log(error.error);
+    });
+
+    this.game.classifications().subscribe((response)=>{
+      this.classifications = response;
+      console.log(this.classifications);
+    },(error)=>{
+      console.log(error);
+      console.log(error.error);
+    });
+
+    this.game.developers().subscribe((response)=>{
+      this.developers = response;
+      console.log(this.developers);
+    },(error)=>{
+      console.log(error);
+      console.log(error.error);
+    });
     }
 
 

@@ -6,22 +6,20 @@ import { Observable, catchError, map, of } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class authGuard implements CanActivate{
+export class activeGuard implements CanActivate{
   constructor(private auth:AuthService,private router:Router){}
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.auth.isauth().pipe(
+    return this.auth.checkstatus().pipe(
       map(response => {
-        if (response.status === 200) {
+        if (response === 1) {
           return true;
-        } else if(response.status === 401){
+        }
+       
           this.router.navigate(['/login']);
           return false;
-        }
-
         
-        return false;
       }),
       catchError(error => {
         console.error(error);
