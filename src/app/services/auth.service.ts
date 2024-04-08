@@ -13,7 +13,7 @@ import { MeInterface } from '../interfaces/Me.interfaces';
 })
 export class AuthService {
 
-  private otro="http://192.168.119.178:8000";
+  private otro="http://127.0.0.1:8000";
   constructor(private http:HttpClient) { 
 
   }

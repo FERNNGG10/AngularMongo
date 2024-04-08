@@ -8,7 +8,8 @@ import { ModalComponent } from '../../components/modal/modal.component';
 import { SupplierIndexInterface } from '../../interfaces/SupplierIndexInterface.interface';
 import { GameService } from '../../services/game.service';
 import { AuthService } from '../../services/auth.service';
-import {webSocket, WebSocketSubject} from 'rxjs/webSocket';
+import Pusher from 'pusher-js';
+import Echo from 'laravel-echo';
 
 @Component({
   selector: 'app-consoles',
@@ -25,8 +26,7 @@ export class ConsolesComponent implements OnInit{
   msg='';
   id=0;
   rol=0;
-  //public notification:string='';
-  //eventsource = new EventSource('http://127.0.0.1:8000/api/stream');
+
   
   public errors={
     name:'',description:'',price:"",stock:"",supplier_id:""
@@ -35,9 +35,10 @@ export class ConsolesComponent implements OnInit{
 
   ngOnInit(): void {
     
-    this.console.index().subscribe((response)=>{
-      this.consoles = response;
-    });
+     this.console.index().subscribe((response)=>{
+        //this.consoles = response;
+        
+     });
    
     this.game.suppliers().subscribe((response)=>{
       this.suppliers = response;
@@ -46,14 +47,26 @@ export class ConsolesComponent implements OnInit{
       this.rol = response
     });
 
-    /*this.eventsource.onmessage=(event)=>{
-      console.log(event.data);
-      this.notification = event.data;
-      setTimeout(()=>{this.notification=''},5000);
-      this.console.index().subscribe((response)=>{
-        this.consoles = response;
-      });
-    }*/
+    this.websocket()
+  }
+
+  websocket(){
+    (window as any).Pusher = Pusher
+    const echo = new Echo({
+      broadcaster: 'pusher',
+      key: 'socketkey',
+      cluster: 'mt1',
+      encrypted: true,
+      wsHost: window.location.hostname,
+      wsPort: 6001,
+      forceTLS: false,
+      disableStatus:true
+    })
+    echo.channel('consolassocket').listen('.Consoles',(e:any)=>{
+      console.log(e)
+      this.consoles = e
+      
+    })
   }
 
   
@@ -125,14 +138,6 @@ export class ConsolesComponent implements OnInit{
       console.log(error.error);
     });
   }
- //token = localStorage.getItem('token');
-  //socket$ = webSocket<ConsoleIndexInterface>('ws://127.0.0.1:6001/app/console?auth_key=' + this.token);
-   /*this.socket$.subscribe(
-      msgg =>{
-        console.log(msgg);
-        this.consoles = msgg;
-      },err=>console.log(err),
-      ()=>console.log('complete')
-    )*/
+
 
 }
