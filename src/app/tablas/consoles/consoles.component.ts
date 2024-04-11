@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,OnDestroy } from '@angular/core';
 import { ConsolesService } from '../../services/consoles.service';
 import { ConsoleDataInterface, ConsoleIndexInterface } from '../../interfaces/ConsoleIndexInterface.interface';
 import { Router, RouterLink } from '@angular/router';
@@ -18,7 +18,7 @@ import Echo from 'laravel-echo';
   templateUrl: './consoles.component.html',
   styleUrl: './consoles.component.css'
 })
-export class ConsolesComponent implements OnInit{
+export class ConsolesComponent implements OnInit,OnDestroy{
   
   public consoles:ConsoleIndexInterface={consoles:[]};
   public consoledata:ConsoleDataInterface={name:'',description:'',price:0,stock:0,supplier_id:0};
@@ -26,7 +26,7 @@ export class ConsolesComponent implements OnInit{
   msg='';
   id=0;
   rol=0;
-
+  echo:any
   
   public errors={
     name:'',description:'',price:"",stock:"",supplier_id:""
@@ -49,10 +49,19 @@ export class ConsolesComponent implements OnInit{
 
     this.websocket()
   }
+  ngOnDestroy(): void {
+      this.closewebsocket()
+  }
+
+  closewebsocket(){
+    if(this.echo){
+      this.echo.disconnect()
+    }
+  }
 
   websocket(){
     (window as any).Pusher = Pusher
-    const echo = new Echo({
+    this.echo = new Echo({
       broadcaster: 'pusher',
       key: 'socketkey',
       cluster: 'mt1',
@@ -62,8 +71,9 @@ export class ConsolesComponent implements OnInit{
       forceTLS: false,
       disableStatus:true
     })
-    echo.channel('consolassocket').listen('.Consoles',(e:any)=>{
+    this.echo.channel('consolassocket').listen('.Consoles',(e:any)=>{
       console.log(e)
+      console.log(this.echo)
       this.consoles = e
       
     })

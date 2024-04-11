@@ -11,7 +11,19 @@ import { AuthService } from '../services/auth.service';
 })
 export class HomeComponent implements OnInit{
   public rol:number = 0;
-  constructor(private router:Router,private auth:AuthService){}
+  constructor(private router:Router,private auth:AuthService){
+    this.router.events.subscribe((event)=>{
+      if(event.constructor.name == 'NavigationEnd'){
+        this.auth.checkrol().subscribe((response)=>{
+          this.rol = response.rol_id;
+          console.log(response.rol_id);
+          console.log(this.rol);
+        },(error)=>{
+          console.error(error);
+        })
+      }
+    })
+  }
   ngOnInit(): void {
     this.auth.checkrol().subscribe((response)=>{
       this.rol = response.rol_id;
@@ -19,6 +31,14 @@ export class HomeComponent implements OnInit{
       console.log(this.rol);
     },(error)=>{
       console.error(error);
+    })
+  }
+  
+  logout():void{
+    this.auth.logout().subscribe(()=>{
+      localStorage.removeItem('token')
+    },(erro)=>{
+      console.error(erro)
     })
   }
 

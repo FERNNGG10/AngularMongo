@@ -13,7 +13,8 @@ import { MeInterface } from '../interfaces/Me.interfaces';
 })
 export class AuthService {
 
-  private otro="http://127.0.0.1:8000";
+  private otro="http://192.168.117.161:8000";
+  //private otro="http://127.0.0.1:8000";
   constructor(private http:HttpClient) { 
 
   }
@@ -47,5 +48,9 @@ export class AuthService {
 
   checkstatus():Observable<any>{
     return this.http.get<any>(`${environment.UrlAuth}status`)
+  }
+
+  logout():Observable<any>{
+    return this.http.post(`${environment.UrlAuth}logout`,{})
   }
 }

@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CategoryDataInterface, CategoryIndexInterface, Root } from '../interfaces/CategoryIndexInterface.interface';
 import { environment } from '../../environments/environment.development';
 import { CategoryShowInterface } from '../interfaces/CategoryShowInterface.interface';
+import { SSEService } from './sse.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,4 +32,6 @@ export class CategoriesService {
   update(id:number,data:CategoryDataInterface):Observable<Root>{
     return this.http.put<Root>(`${environment.UrlCategories}update/${id}`,data);
   }
+
+ 
 }

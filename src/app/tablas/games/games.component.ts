@@ -1,5 +1,5 @@
 import { ImplicitReceiver } from '@angular/compiler';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,OnDestroy } from '@angular/core';
 import { GameService } from '../../services/game.service';
 import { GameDataInterface, GameIndexInterface } from '../../interfaces/GameIndexInterface.interface';
 import { ModalComponent } from '../../components/modal/modal.component';
@@ -11,7 +11,7 @@ import { DeveloperIndexInterface } from '../../interfaces/DeveloperIndexInterfac
 import { CommonModule } from '@angular/common';
 import { Router,RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { interval } from 'rxjs';
+import { Subject, interval, take, takeUntil } from 'rxjs';
 import { switchMap } from 'rxjs';
 
 
@@ -22,7 +22,7 @@ import { switchMap } from 'rxjs';
   templateUrl: './games.component.html',
   styleUrl: './games.component.css'
 })
-export class GamesComponent implements OnInit{
+export class GamesComponent implements OnInit,OnDestroy{
 
   public games : GameIndexInterface={games:[]};
   public categories:CategoryIndexInterface={categories:[]};
@@ -36,6 +36,7 @@ export class GamesComponent implements OnInit{
   public errors={
     name:'',description:'',price:'',stock:'',category_id:'',supplier_id:'',classification_id:'',developer_id:''
   } 
+  destroy$ = new Subject<void>()
   constructor(private game:GameService,private auth:AuthService) { }
 
     gameform = new FormGroup({
@@ -65,6 +66,7 @@ export class GamesComponent implements OnInit{
   ngOnInit(): void {
 
     interval(5000).pipe(
+      takeUntil(this.destroy$),
       switchMap(()=>this.game.index())
     ).subscribe(
       (response)=>{this.games = response;},
@@ -175,6 +177,13 @@ export class GamesComponent implements OnInit{
       console.log(error.error);
     });
     }
+
+   
+    ngOnDestroy(): void {
+        this.destroy$.next()
+        this.destroy$.complete()
+    }
+    
 
 
 

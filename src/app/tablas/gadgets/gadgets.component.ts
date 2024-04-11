@@ -1,19 +1,15 @@
-import { ImplicitReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { GameService } from '../../services/game.service';
-import { GameDataInterface, GameIndexInterface } from '../../interfaces/GameIndexInterface.interface';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { FormControl, FormsModule, ReactiveFormsModule ,FormGroup,Validators } from '@angular/forms';
-import { CategoryIndexInterface } from '../../interfaces/CategoryIndexInterface.interface';
 import { SupplierIndexInterface } from '../../interfaces/SupplierIndexInterface.interface';
-import { ClassificationIndexInterface } from '../../interfaces/ClassificationIndexInterface.interface';
-import { DeveloperIndexInterface } from '../../interfaces/DeveloperIndexInterface.interface';
 import { CommonModule } from '@angular/common';
 import { Router,RouterLink } from '@angular/router';
 import { GadgetDataInterface, GadgetIndexInterface } from '../../interfaces/GadgetIndexInterface.interface';
 import { GadgetsService } from '../../services/gadgets.service';
 import { AuthService } from '../../services/auth.service';
-import { webSocket,WebSocketSubject,WebSocketSubjectConfig } from 'rxjs/webSocket';
+import { SSEService } from '../../services/sse.service';
+
 
 
 @Component({
@@ -31,11 +27,11 @@ export class GadgetsComponent implements OnInit{
   rol=0;
   public id=0;
   
-  
+ 
   public errors={
     name:'',price:'',stock:'',supplier_id:'',description:''
   } 
-  constructor(private gadget:GadgetsService,private game:GameService,private auth:AuthService) { 
+  constructor(private gadget:GadgetsService,private game:GameService,private auth:AuthService,private sseService:SSEService) { 
     
   }
 
@@ -49,7 +45,11 @@ export class GadgetsComponent implements OnInit{
     this.auth.rolid().subscribe((response)=>{
       this.rol = response
     });
+    
+  
   }
+
+
   gadgetform = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(5),Validators.maxLength(30)]),
     price: new FormControl('', [Validators.required, Validators.min(1), Validators.pattern(/^\d+$/)]),
